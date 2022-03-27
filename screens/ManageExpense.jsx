@@ -1,9 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, KeyboardAvoidingView } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import React, { useLayoutEffect } from "react";
 import { GlobalStyles } from "../constants/style";
 import IconButton from "../components/ui/IconButton";
 import Button from "../components/ui/Button.jsx";
 import { useDispatch } from "react-redux";
+import ExpenseForm from "../components/manageExpense/ExpenseForm";
 import {
   removeExpense,
   addExpense,
@@ -14,6 +16,13 @@ const ManageExpense = ({ route, navigation }) => {
   const id = route.params?.id;
   const isEditing = !!id;
   const dispatch = useDispatch();
+
+  const [data, setData] = React.useState({
+    id: null,
+    description: "",
+    amount: 0,
+    date: "",
+  });
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -35,19 +44,24 @@ const ManageExpense = ({ route, navigation }) => {
     console.log("Confirm expense!");
     if (isEditing) {
     } else {
-      const dummy_data = {
-        id: Math.random().toString(),
-        description: "yeni buuu",
-        amount: 11.99,
-        date: new Date(),
-      };
-      dispatch(addExpense(dummy_data));
+      dispatch(addExpense(data));
     }
     navigation.goBack();
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView
+      resetScrollToCoords={{ x: 0, y: 0 }}
+      contentContainerStyle={styles.container}
+    >
+      <ExpenseForm
+        setData={setData}
+        data={data}
+        style={styles.form}
+        header={
+          isEditing ? `Editing ${route.params.description}` : "Add New Expense"
+        }
+      />
       <View style={styles.buttons}>
         <Button mode="flat" style={styles.button} onPress={cancelHandler}>
           Cancel
@@ -67,7 +81,7 @@ const ManageExpense = ({ route, navigation }) => {
           />
         </View>
       )}
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -76,9 +90,13 @@ export default ManageExpense;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: "100%",
     padding: 10,
     alignItems: "center",
     backgroundColor: GlobalStyles.colors.primary,
+  },
+  form: {
+    width: "100%",
   },
   buttons: {
     marginTop: 40,

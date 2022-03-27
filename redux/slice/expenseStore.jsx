@@ -9,10 +9,21 @@ const expenseSlice = createSlice({
   initialState,
   reducers: {
     addExpense: (state, action) => {
-      state.expenses.unshift(action.payload);
+      const { description, amount, date } = action.payload;
+      const expenseId = (Math.random() * 1000000000).toFixed(0).toString();
+      const expense = {
+        id: expenseId,
+        description: description,
+        amount: amount,
+        date: new Date(date),
+      };
+      state.expenses.unshift(expense);
     },
     removeExpense: (state, action) => {
-      state.expenses.splice(action.payload, 1);
+      const filteredExpenses = state.expenses.filter(
+        (expense) => expense.id !== action.payload
+      );
+      state.expenses = filteredExpenses;
     },
     editExpense: (state, action) => {
       state.expenses[action.payload.index] = action.payload.expense;
