@@ -4,24 +4,29 @@ import React, { useLayoutEffect } from "react";
 import { GlobalStyles } from "../constants/style";
 import IconButton from "../components/ui/IconButton";
 import Button from "../components/ui/Button.jsx";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ExpenseForm from "../components/manageExpense/ExpenseForm";
 import {
   removeExpense,
   addExpense,
   editExpense,
+  getExpenseById,
 } from "../redux/slice/expenseStore";
 
 const ManageExpense = ({ route, navigation }) => {
   const id = route.params?.id;
   const isEditing = !!id;
   const dispatch = useDispatch();
+  const expenses = useSelector((state) => state.expense.expenses);
+  const selectedExpense = expenses?.find((expense) => expense?.id === id);
 
   const [data, setData] = React.useState({
-    id: null,
-    description: "",
-    amount: 0,
-    date: "",
+    id: selectedExpense ? selectedExpense.id : "",
+    description: selectedExpense ? selectedExpense.description : "",
+    amount: selectedExpense ? selectedExpense.amount.toString() : 0,
+    date: selectedExpense
+      ? selectedExpense.date.toISOString().slice(0, 10)
+      : "",
   });
 
   useLayoutEffect(() => {
@@ -43,6 +48,7 @@ const ManageExpense = ({ route, navigation }) => {
   const confirmHandler = () => {
     console.log("Confirm expense!");
     if (isEditing) {
+      dispatch(editExpense(data));
     } else {
       dispatch(addExpense(data));
     }
@@ -58,6 +64,7 @@ const ManageExpense = ({ route, navigation }) => {
         setData={setData}
         data={data}
         style={styles.form}
+        defaultValues={selectedExpense}
         header={
           isEditing ? `Editing ${route.params.description}` : "Add New Expense"
         }
@@ -109,7 +116,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   deleteButton: {
-    width: "70%",
+    width: "80%",
     backgroundColor: GlobalStyles.colors.secondary,
     borderRadius: 8,
     marginTop: 25,

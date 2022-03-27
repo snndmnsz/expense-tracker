@@ -1,7 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  expenses: [],
+  expenses: [
+    {
+      id: 1,
+      description: "Gum",
+      amount: 195,
+      date: new Date("2019-01-01"),
+    },
+  ],
 };
 
 const expenseSlice = createSlice({
@@ -26,7 +33,11 @@ const expenseSlice = createSlice({
       state.expenses = filteredExpenses;
     },
     editExpense: (state, action) => {
-      state.expenses[action.payload.index] = action.payload.expense;
+      const { id, description, amount, date } = action.payload;
+      const expense = state.expenses.find((expense) => expense.id === id);
+      expense.description = description;
+      expense.amount = +amount;
+      expense.date = new Date(date);
     },
   },
 });
