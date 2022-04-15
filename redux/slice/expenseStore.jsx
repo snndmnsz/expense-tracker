@@ -6,7 +6,37 @@ const initialState = {
       id: 1,
       description: "Gum",
       amount: 195,
-      date: new Date("2019-01-01"),
+      date: new Date("2022-03-01"),
+    },
+    {
+      id: 2,
+      description: "Rent",
+      amount: 109500,
+      date: new Date("2022-03-26"),
+    },
+    {
+      id: 3,
+      description: "Credit Card",
+      amount: 4500,
+      date: new Date("2022-03-25"),
+    },
+    {
+      id: 4,
+      description: "Books",
+      amount: 65,
+      date: new Date("2022-02-10"),
+    },
+    {
+      id: 5,
+      description: "Car Rental",
+      amount: 250,
+      date: new Date("2022-03-10"),
+    },
+    {
+      id: 6,
+      description: "Grocery",
+      amount: 200,
+      date: new Date("2022-03-27"),
     },
   ],
 };

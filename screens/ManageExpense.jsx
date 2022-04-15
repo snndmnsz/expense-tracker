@@ -21,7 +21,7 @@ const ManageExpense = ({ route, navigation }) => {
   const selectedExpense = expenses?.find((expense) => expense?.id === id);
 
   const [data, setData] = React.useState({
-    id: selectedExpense ? selectedExpense.id : "",
+    id: selectedExpense ? selectedExpense.id.toString() : "",
     description: selectedExpense ? selectedExpense.description : "",
     amount: selectedExpense ? selectedExpense.amount.toString() : 0,
     date: selectedExpense
